@@ -1,0 +1,31 @@
+def bellman_ford(graph, start):
+    # Initialize distances with infinity, and set the start node distance to 0
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+
+    # Relax edges repeatedly (V - 1 times)
+    for _ in range(len(graph) - 1):
+        for node in graph:
+            for neighbor, weight in graph[node]:
+                if distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+
+    # Check for negative weight cycles
+    for node in graph:
+        for neighbor, weight in graph[node]:
+            if distances[node] + weight < distances[neighbor]:
+                print("Graph contains a negative weight cycle")
+
+    return distances
+
+# Example graph: dictionary format {node: [(neighbor, weight), ...]}
+graph_bf = {
+    'A': [('B', -1), ('C', 4)],
+    'B': [('C', 3), ('D', 2), ('E', 2)],
+    'C': [],
+    'D': [('B', 1), ('C', 5)],
+    'E': [('D', -3)]
+}
+
+# Test the algorithm
+print(bellman_ford(graph_bf, 'A'))

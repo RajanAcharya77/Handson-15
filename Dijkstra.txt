@@ -1,0 +1,34 @@
+import heapq
+
+def dijkstra(graph, start):
+    # Initialize distances with infinity, and set the start node distance to 0
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]  # priority queue for processing nodes
+
+    while pq:
+        current_distance, current_node = heapq.heappop(pq)
+
+        # Skip processing if we've already found a shorter path
+        if current_distance > distances[current_node]:
+            continue
+        
+        for neighbor, weight in graph[current_node]:
+            distance = current_distance + weight
+            # If a shorter path is found, update distance and push to queue
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(pq, (distance, neighbor))
+
+    return distances
+
+# Example graph: dictionary format {node: [(neighbor, weight), ...]}
+graph = {
+    'A': [('B', 1), ('C', 4)],
+    'B': [('A', 1), ('C', 2), ('D', 5)],
+    'C': [('A', 4), ('B', 2), ('D', 1)],
+    'D': [('B', 5), ('C', 1)]
+}
+
+# Test the algorithm
+print(dijkstra(graph, 'A'))

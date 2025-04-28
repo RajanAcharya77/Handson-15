@@ -1,0 +1,31 @@
+def floyd_warshall(graph):
+    # Initialize distance matrix with infinity, and 0 for self-loop
+    nodes = list(graph.keys())
+    dist = {node: {other_node: float('inf') for other_node in nodes} for node in nodes}
+    for node in nodes:
+        dist[node][node] = 0
+
+    # Set initial edge weights from the graph
+    for node in graph:
+        for neighbor, weight in graph[node]:
+            dist[node][neighbor] = weight
+
+    # Apply the Floyd-Warshall update rule
+    for k in nodes:
+        for i in nodes:
+            for j in nodes:
+                if dist[i][j] > dist[i][k] + dist[k][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+
+    return dist
+
+# Example graph: dictionary format {node: [(neighbor, weight), ...]}
+graph_fw = {
+    'A': [('B', 1), ('C', 4)],
+    'B': [('A', 1), ('C', 2), ('D', 5)],
+    'C': [('A', 4), ('B', 2), ('D', 1)],
+    'D': [('B', 5), ('C', 1)]
+}
+
+# Test the algorithm
+print(floyd_warshall(graph_fw))
